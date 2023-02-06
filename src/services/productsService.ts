@@ -8,4 +8,8 @@ export default class ProductService {
   async getAll(): Promise<IProduct[]> {
     return this.productModel.getAll();
   }
+
+  async createProduct(name: string, amount: string): Promise<IProduct> {
+    return this.productModel.createProduct(name, amount);
+  }
 }
