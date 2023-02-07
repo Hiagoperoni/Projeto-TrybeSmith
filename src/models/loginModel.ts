@@ -1,6 +1,6 @@
 // import { RowDataPacket } from 'mysql2';
-import { Pool, ResultSetHeader } from 'mysql2/promise';
-// import { ILogin } from '../Interfaces/Login';
+import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import { ILogin } from '../Interfaces/Login';
 
 export default class LoginModel {
   public connection: Pool;
@@ -19,5 +19,16 @@ export default class LoginModel {
       'INSERT INTO Trybesmith.users(username, vocation, level, password) VALUES(?, ?, ?, ?)',
       [username, vocation, level, password],
     );
+  }
+
+  async verifyLogin(
+    username: string,
+    password: string,
+  ): Promise<object> {
+    const [[result]] = await this.connection.execute<ILogin & RowDataPacket[]>(
+      'SELECT * FROM Trybesmith.users WHERE username = ? AND password = ?',
+      [username, password],
+    );
+    return result;
   }
 }
